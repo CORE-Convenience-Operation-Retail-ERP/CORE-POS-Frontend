@@ -12,17 +12,31 @@ const LoginPage = () => {
     const handleLogin = async () => {
         try {
             const response = await axios.post('/api/auth/login', {
+                
                 loginId,
                 loginPwd,
             });
             
+            console.log("로그인 응답:", response.data);
+
             const token = response.data.token;
+            const user = response.data;
+            const branchName = response.data.branchName || response.data.storeName || "";
+            const storeId = user.storeId || user.store_id || user.store?.storeId;
 
         if (token) {
             localStorage.setItem('posToken', token);
             localStorage.setItem('posUser', JSON.stringify(response.data));
+            localStorage.setItem("branchName", branchName);
+            localStorage.setItem('storeId', storeId || '');
+
+            if (!storeId) {
+                alert("⛔ storeId 정보가 없습니다. 관리자에게 문의하세요.");
+                return;
+              }
             
-            navigate('/pos/home');
+            
+            navigate('/pos/order');
         } else {
             setError('로그인 실패 : 토큰이 없습니다.');
         }
