@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import HomePage from '../pages/pos/HomePage';
 import PosLayout from '../layouts/PosLayout';
-import LoginPage from '../pages/pos/LoginPage';
+import LoginPage from '../pages/LoginPage';
+import OrderPage from '../pages/OrderPage';
+
 
 const PosRoutes = () => {
   return (
@@ -9,7 +10,7 @@ const PosRoutes = () => {
       <Route path="/" element={<Navigate to="/pos" replace />} />
       <Route path="/pos/*" element={<PosLayout />}>
         <Route index element={<LoginPage />} />
-        <Route path="home" element={<HomePage />} />
+        <Route path="order" element={<OrderPage />} />
       </Route>
     </Routes>
 
