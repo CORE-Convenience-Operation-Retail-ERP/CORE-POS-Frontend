@@ -10,11 +10,11 @@ function OrderCon(){
     const [showManualInput, setShowManualInput] = useState(false);
    
 
-    // 추후 백엔드 연동
+    // isPromo: 0 = 일반, 2 = 1+1, 3 = 2+1
     const productDB = {
-        "6920339019631": { name: "초코바", price: 1000 },
-        "8806416055519": { name: "콜라", price: 1500 },
-        "8809988776655": { name: "삼각김밥", price: 1800 }
+        "6920339019631": { name: "초코바", price: 1000, isPromo: 2 }, // 1+1
+        "8806416055519": { name: "콜라", price: 1500, isPromo: 0 }, // 일반
+        "8809480523830": { name: "삼각김밥", price: 1800, isPromo: 3 } // 2+1
     };
 
     const handleBarcode = (barcode) => {
@@ -28,7 +28,8 @@ function OrderCon(){
             ...prev,
             [barcode]: {
                 ...product,
-                quantity: (prev[barcode]?.quantity || 0) + 1
+                quantity: (prev[barcode]?.quantity || 0) + 1,
+                isPromo: product.isPromo
             }
         }));
     };

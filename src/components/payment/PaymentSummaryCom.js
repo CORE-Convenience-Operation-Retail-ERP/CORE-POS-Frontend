@@ -8,10 +8,18 @@ const PaymentSummaryCom = ({ cart }) => {
   );
 
   // 총 할인 (프로모션 적용된 경우)
-  const totalDiscount = items.reduce(
-    (sum, item) => sum + (item.discount || 0) * item.quantity,
-    0
-  );
+  const totalDiscount = items.reduce((sum, item) => {
+    let discount = 0;
+    if (item.isPromo === 2) {
+      // 1+1 : 2개 중 1개 무료 → 수량이 2 이상일 때만 할인 적용
+      discount = Math.floor(item.quantity / 2) * item.price;
+    } else if (item.isPromo === 3) {
+      // 2+1 : 3개당 1개 무료
+      discount = Math.floor(item.quantity / 3) * item.price;
+    }
+    return sum + discount;
+  }, 0);
+  
 
   // 최종 결제 금액 (총 정가 - 할인)
   const finalAmount = totalPrice - totalDiscount;
