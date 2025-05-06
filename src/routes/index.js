@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import PosLayout from '../layouts/PosLayout';
 import LoginPage from '../pages/LoginPage';
 import OrderPage from '../pages/OrderPage';
+import PaymentResultPage from '../pages/PaymentResultPage';
 
 
 const PosRoutes = () => {
@@ -11,6 +12,7 @@ const PosRoutes = () => {
       <Route path="/pos/*" element={<PosLayout />}>
         <Route index element={<LoginPage />} />
         <Route path="order" element={<OrderPage />} />
+        <Route path="result" element={<PaymentResultPage />} />
       </Route>
     </Routes>
 

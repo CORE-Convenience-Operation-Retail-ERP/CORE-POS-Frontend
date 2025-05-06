@@ -3,6 +3,7 @@ import ManualInputCom from "../components/ManualInputCom";
 import CartListCom from "../components/CartListCom";
 import PaymentButtonCom from "../components/payment/PaymentButtonCom";
 import BarcodeScannerCom from "../components/BarcodeScannerCom";
+import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 
 function OrderCon(){
     const [cart, setCart] = useState({});
@@ -76,6 +77,7 @@ function OrderCon(){
             {showManualInput && (<ManualInputCom onBarcodeSubmit={handleBarcode} /> )}
 
             <CartListCom cart={cart} onIncrease={handleIncrease} onDecrease={handleDecrease} />
+            <PaymentSummaryCom cart={cart} />
             <PaymentButtonCom cart={cart} />
     </div>
   );
