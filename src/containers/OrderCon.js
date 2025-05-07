@@ -4,35 +4,39 @@ import CartListCom from "../components/CartListCom";
 import PaymentButtonCom from "../components/payment/PaymentButtonCom";
 import BarcodeScannerCom from "../components/BarcodeScannerCom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
+import axios from "axios";
 
 function OrderCon(){
     const [cart, setCart] = useState({});
     const [showManualInput, setShowManualInput] = useState(false);
    
-
-    // isPromo: 0 = 일반, 2 = 1+1, 3 = 2+1
-    const productDB = {
-        "6920339019631": { name: "초코바", price: 1000, isPromo: 2 }, // 1+1
-        "8806416055519": { name: "콜라", price: 1500, isPromo: 0 }, // 일반
-        "8809480523830": { name: "삼각김밥", price: 1800, isPromo: 3 } // 2+1
-    };
-
-    const handleBarcode = (barcode) => {
-        const product = productDB[barcode];
-        if (!product) {
+    const handleBarcode = async (barcode) => {
+        try {
+          const response = await axios.get(`/api/barcode`, {
+            params: { code: barcode },
+          });
+    
+          const product = response.data;
+    
+          if (!product || !product.productName) {
             alert("등록되지 않은 상품입니다.");
             return;
-        }
+          }
 
-        setCart((prev) => ({
+          setCart((prev) => ({
             ...prev,
             [barcode]: {
-                ...product,
-                quantity: (prev[barcode]?.quantity || 0) + 1,
-                isPromo: product.isPromo
-            }
+              name: product.productName,
+              price: product.price || 1000, // 가격이 없다면 임시 기본값
+              isPromo: product.isPromo || 0,
+              quantity: (prev[barcode]?.quantity || 0) + 1,
+            },
         }));
-    };
+    } catch (error) {
+      console.error("상품 정보 가져오기 실패:", error);
+      alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+    }
+  };
 
     const handleIncrease = (barcode) => {
         setCart((prev) => ({

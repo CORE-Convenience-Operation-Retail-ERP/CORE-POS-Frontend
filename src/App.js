@@ -1,12 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PosRoutes from './routes';
+import BarcodeSearch from './pages/BarcodeSearch';
 
 function App() {
   return (
     <BrowserRouter>
-      <PosRoutes />
+      <Routes>
+        <Route path="/*" element={<PosRoutes />} />
+        <Route path="/test/barcode" element={<BarcodeSearch />} />
+      </Routes>
     </BrowserRouter>
   );
 }
