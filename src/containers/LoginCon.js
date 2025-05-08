@@ -24,11 +24,6 @@ const LoginCon = () => {
         try {
             const data = await loginRequest(loginInput);
 
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('branchName', data.branchName);
-            localStorage.setItem('storeId', data.storeId);
-            localStorage.setItem('empName', data.empName);
-
             saveAuthToStorage(data);
 
             navigate('/pos/order');

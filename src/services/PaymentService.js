@@ -5,7 +5,7 @@ export const savePayment = async (paymentData) => {
         const token = localStorage.getItem("accessToken");
 
         const response = await axios.post(
-            "/api/pos/payment",
+            `/api/pos/pay`,
             paymentData,
             {
                 headers : {

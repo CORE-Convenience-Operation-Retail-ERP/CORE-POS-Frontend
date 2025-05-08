@@ -51,10 +51,10 @@ const PaymentButtonCom = ({ cart }) => {
       {
         pg : "html5_inicis", // 결제 대행사
         pay_method : "card", // 카드 고정 (필요시 UI로 선택 가능)
+        merchant_uid: `order_${Date.now()}`, 
         name : `${storeName} 매장 결제`,
         amount : totalFinalAmount,
         buyer_name : buyerName,
-        buyer_email : "pos@core.com", // 추후 로그인 이메일 사용 가능
         buyer_tel : "010-0000-0000", // 입력 UI 없음 → 고정
       },
       async (rsp) => {
@@ -67,17 +67,18 @@ const PaymentButtonCom = ({ cart }) => {
               paymentMethod : "card",
               impUid : rsp.imp_uid,
               merchantUid : rsp.merchant_uid,
-              items : items.map(([barcode, item]) => {
+              itemList : items.map(([barcode, item]) => {
                 const originTotal = item.price * item.quantity;
                 const finalAmount = calculateFinalAmount(item);
                 return {
                   barcode,
+                  productId: item.productId,
                   name: item.name,
-                  quantity: item.quantity,
-                  price: item.price,
+                  salesQuantity: item.quantity,
+                  unitPrice: item.price,
                   isPromo: item.isPromo || 0,
                   discount: originTotal - finalAmount,
-                  finalAmount,
+                  finalAmount: finalAmount,
                 };
               }),
             };

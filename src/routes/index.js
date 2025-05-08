@@ -7,14 +7,17 @@ import TransactionPage from '../pages/TransactionListPage';
 
 
 const PosRoutes = () => {
+
+  const token = localStorage.getItem("accessToken");
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/pos" replace />} />
       <Route path="/pos/*" element={<PosLayout />}>
         <Route index element={<LoginPage />} />
-        <Route path="order" element={<OrderPage />} />
-        <Route path="result" element={<PaymentResultPage />} />
-        <Route path="transactions" element={<TransactionPage />} />
+        <Route path="order" element={token ? <OrderPage /> : <Navigate to="/pos" replace />} />
+        <Route path="result" element={token ? <PaymentResultPage /> : <Navigate to="/pos" replace />} />
+        <Route path="transactions" element={token ? <TransactionPage /> : <Navigate to="/pos" replace />} />
       </Route>
     </Routes>
 
