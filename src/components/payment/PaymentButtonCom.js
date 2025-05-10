@@ -50,7 +50,7 @@ const PaymentButtonCom = ({ cart }) => {
     IMP.request_pay(
       {
         pg : "html5_inicis", // 결제 대행사
-        pay_method : "card", // 카드 고정 (필요시 UI로 선택 가능)
+        pay_method : "CARD", // 카드 고정 (필요시 UI로 선택 가능)
         merchant_uid: `order_${Date.now()}`, 
         name : `${storeName} 매장 결제`,
         amount : totalFinalAmount,

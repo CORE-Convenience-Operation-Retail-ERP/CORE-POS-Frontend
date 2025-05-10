@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
 const BarcodeScannerCom = ({ onScanSuccess }) => {
+
+  const isScannedRef = useRef(false);
+
   useEffect(() => {
     const scanner = new Html5QrcodeScanner(
       "reader", 
@@ -14,9 +17,19 @@ const BarcodeScannerCom = ({ onScanSuccess }) => {
 
     scanner.render(
       (decodedText) => {
-        console.log(" 바코드 :", decodedText);
-        onScanSuccess(decodedText); 
-        scanner.clear(); 
+     if (!isScannedRef.current && decodedText) {
+          console.log("✅ 스캔된 바코드:", decodedText);
+          isScannedRef.current = true;
+
+          onScanSuccess(decodedText); // 부모 컴포넌트로 전달
+
+          // 잠깐 기다린 후 clear → 스캐너 안정성 보장
+          setTimeout(() => {
+            scanner.clear().catch((e) =>
+              console.error("❌ 스캐너 클리어 실패:", e)
+            );
+          }, 1000);
+        }
       },
       (errorMessage) => {
         
@@ -24,7 +37,9 @@ const BarcodeScannerCom = ({ onScanSuccess }) => {
     );
 
     return () => {
-      scanner.clear().catch((e) => console.error(" 클리어 실패:", e));
+      scanner.clear().catch((e) =>
+        console.error("❌ 언마운트 시 클리어 실패:", e)
+      );
     };
   }, [onScanSuccess]);
 
