@@ -26,7 +26,7 @@ const TransactionListCon = () => {
       alert("환불이 완료되었습니다.");
       loadTransactions(); // 다시 목록 갱신
     } catch (error) {
-      alert("환불에 실패했습니다.");
+      alert("환불 처리 중 오류가 발생했습니다.");
     }
   };
 
