@@ -5,11 +5,14 @@ import PaymentButtonCom from "../components/payment/PaymentButtonCom";
 // import BarcodeScannerCom from "../components/BarcodeScannerCom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 import axios from "axios";
+import DisposalModal from "../components/DisposalModal";
 
 function OrderCon(){
     const [cart, setCart] = useState({});
     const [showManualInput, setShowManualInput] = useState(false);
     const [scannerActive, setScannerActive] = useState(true);
+    const [scannedProduct, setScannedProduct] = useState(null);
+    const [isDisposalModalOpen, setIsDisposalModalOpen] = useState(false);
 
    
     const handleBarcode = async (barcode) => {
@@ -28,14 +31,28 @@ function OrderCon(){
           alert("등록되지 않은 상품입니다.");
           return;
         }
+
+        // 폐기 대상 여부 판단 (예: 만료일 확인)
+        if (product.isExpired) {
+            // 폐기 대상이면 모달 띄우기
+            setScannedProduct({
+              stockId: product.stockId,
+              productId: product.productId,
+              proName: product.productName,
+              unitPrice: product.unitPrice,
+            });
+            setIsDisposalModalOpen(true); // 모달 오픈
+            return; // 장바구니에는 추가하지 않음
+          }
         
+        // 일반 상품은 장바구니에 추가
         const productName = product.productName || product.PRDLST_NM || "이름 없음";
 
         setCart((prev) => ({
           ...prev,
           [barcode]: {
             productId: product.productId,
-            name: productName,
+            name: product.proName,
             price: product.price,
             isPromo: product.isPromo || 0,
             quantity: (prev[barcode]?.quantity || 0) + 1,
@@ -100,6 +117,15 @@ function OrderCon(){
             <CartListCom cart={cart} onIncrease={handleIncrease} onDecrease={handleDecrease} />
             <PaymentSummaryCom cart={cart} />
             <PaymentButtonCom cart={cart} />
+
+            {/* 폐기 등록 모달 */}
+            <DisposalModal isOpen={isDisposalModalOpen} 
+            onClose={() => {
+                setIsDisposalModalOpen(false);
+                setScannerActive(true); // 모달 닫으면 스캐너 재활성화
+            }}
+        productInfo={scannedProduct}
+      />
     </div>
   );
 };
