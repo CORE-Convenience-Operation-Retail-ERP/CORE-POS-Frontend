@@ -4,6 +4,8 @@ export const savePayment = async (paymentData) => {
     try {
         const token = localStorage.getItem("accessToken");
 
+        console.log("💳 [결제 요청 DTO 전송 전] paymentData:", JSON.stringify(paymentData, null, 2));
+
         const response = await axios.post(
             `/api/pos/pay`,
             paymentData,
@@ -13,6 +15,8 @@ export const savePayment = async (paymentData) => {
                 },
             }
         );
+
+        console.log("✅ [서버 응답] 결제 저장 성공:", response.data);
 
         return response.data;
     } catch (error) {

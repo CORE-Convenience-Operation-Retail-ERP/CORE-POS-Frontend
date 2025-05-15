@@ -37,8 +37,25 @@ const PaymentSummaryCom = ({ cart }) => {
     <div style={{ marginTop: '16px', padding: '12px', border: '1px solid #ccc', borderRadius: '8px' }}>
       <h4>💳 결제 요약</h4>
       <p>총 상품 금액: {totalPrice.toLocaleString()}원</p>
-      {totalDiscount > 0 && (<p>총 할인 금액: -{totalDiscount.toLocaleString()}원</p>)}
+      {totalDiscount > 0 && (
+        <p style={{ color: 'green' }}>
+          총 할인 금액: -{totalDiscount.toLocaleString()}원
+        </p>
+      )}
       <p><strong>최종 결제 금액: {finalAmount.toLocaleString()}원</strong></p>
+
+      {/* 추가: 어떤 항목에 얼마나 할인됐는지 개별 표시 */}
+      {items.map((item) => {
+        const discount = calculateDiscount(item);
+        if (discount > 0) {
+          return (
+            <p key={item.productId} style={{ fontSize: "13px", marginLeft: "10px", color: "#555" }}>
+              👉 <strong>{item.name}</strong> 프로모션 적용 할인: -{discount.toLocaleString()}원
+            </p>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };

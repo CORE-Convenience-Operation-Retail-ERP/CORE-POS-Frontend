@@ -1,0 +1,20 @@
+@media print {
+  body {
+    background: white;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  #receipt-box {
+    box-shadow: none;
+    border: none;
+  }
+}

@@ -64,7 +64,7 @@ const PaymentButtonCom = ({ cart }) => {
             const paymentData = {
               storeId : parseInt(storeId),
               totalPrice : totalFinalAmount,
-              paymentMethod : "card",
+              paymentMethod : "CARD",
               impUid : rsp.imp_uid,
               merchantUid : rsp.merchant_uid,
               itemList : items.map(([barcode, item]) => {
@@ -72,12 +72,13 @@ const PaymentButtonCom = ({ cart }) => {
                 const finalAmount = calculateFinalAmount(item);
                 return {
                   barcode,
+                  stockId: item.stockId,
                   productId: item.productId,
                   name: item.name,
                   salesQuantity: item.quantity,
                   unitPrice: item.price,
                   isPromo: item.isPromo || 0,
-                  discount: originTotal - finalAmount,
+                  discountPrice: originTotal - finalAmount,
                   finalAmount: finalAmount,
                 };
               }),

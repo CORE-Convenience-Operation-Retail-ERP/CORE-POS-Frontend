@@ -52,8 +52,9 @@ function OrderCon(){
           ...prev,
           [barcode]: {
             productId: product.productId,
-            name: product.proName,
-            price: product.price,
+            stockId: product.stockId,
+            name: product.productName,
+            price: product.unitPrice, 
             isPromo: product.isPromo || 0,
             quantity: (prev[barcode]?.quantity || 0) + 1,
           },
