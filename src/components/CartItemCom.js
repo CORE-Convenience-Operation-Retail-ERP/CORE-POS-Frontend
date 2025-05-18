@@ -18,7 +18,7 @@ const CartItemCom = ({ item, onIncrease, onDecrease }) => {
         <button onClick={() => onDecrease(item.barcode)}>-</button>
         <span>{item.quantity}</span>
         <button onClick={() => onIncrease(item.barcode)}>+</button>
-        <span>{(item.price * item.quantity).toLocaleString()}원</span>
+        <span>{(Number(item.price || 0) * Number(item.quantity || 0)).toLocaleString()}원</span>
       </div>
     </div>
   );

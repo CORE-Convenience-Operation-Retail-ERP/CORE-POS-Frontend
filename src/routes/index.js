@@ -5,6 +5,7 @@ import OrderPage from '../pages/OrderPage';
 import PaymentResultPage from '../pages/PaymentResultPage';
 import TransactionPage from '../pages/TransactionListPage';
 import ReceiptPage from '../pages/ReceiptPage';
+import UnifiedSettlementPage from '../pages/UnifiedSettlementPage';
 
 
 const PosRoutes = () => {
@@ -20,6 +21,7 @@ const PosRoutes = () => {
         <Route path="result" element={token ? <PaymentResultPage /> : <Navigate to="/pos" replace />} />
         <Route path="transactions" element={token ? <TransactionPage /> : <Navigate to="/pos" replace />} />
         <Route path="receipt/:transactionId" element={<ReceiptPage />} />
+        <Route path="settlement" element={<UnifiedSettlementPage />} />
       </Route>
     </Routes>
 

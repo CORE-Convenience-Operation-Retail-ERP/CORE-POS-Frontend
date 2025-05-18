@@ -2,10 +2,12 @@ import { useState } from "react";
 import ManualInputCom from "../components/ManualInputCom";
 import CartListCom from "../components/CartListCom";
 import PaymentButtonCom from "../components/payment/PaymentButtonCom";
-// import BarcodeScannerCom from "../components/BarcodeScannerCom";
+import BarcodeScannerCom from "../components/BarcodeScannerCom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 import axios from "axios";
 import DisposalModal from "../components/DisposalModal";
+import { fetchRelatedProducts } from "../services/fetchRelatedProducts";
+import { fetchFoodProduct } from "../services/fetchFoodProduct";
 
 function OrderCon(){
     const [cart, setCart] = useState({});
@@ -62,6 +64,34 @@ function OrderCon(){
       } catch (error) {
         console.error("상품 정보 가져오기 실패:", error);
         alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+      
+        const external = await fetchFoodProduct(barcode);
+        if (!external || !external.barcode) {
+          alert("공공 API에서 상품을 찾을 수 없습니다.");
+          return;
+        }
+      
+        const externalBarcode = external.barcode;
+      
+        console.log("✅ 공공 API 결과:", external);
+        console.log("바코드:", externalBarcode);
+        console.log("상품명:", external.name);
+        console.log("가격:", external.price);
+      
+        const related = await fetchRelatedProducts(externalBarcode);
+        console.log("🔁 연계 상품:", related);
+      
+        setCart((prev) => ({
+          ...prev,
+          [externalBarcode]: {
+            productId: null,
+            stockId: null,
+            name: external.name || external.productName || "이름 없음",
+            price: Number(external.price) || 0,
+            isPromo: 0,
+            quantity: (prev[externalBarcode]?.quantity || 0) + 1,
+          },
+        }));
       } finally {
         // 1초 후 스캐너 다시 활성화
         setTimeout(() => {
@@ -109,11 +139,13 @@ function OrderCon(){
                 {showManualInput ? '❌ 입력창 닫기' : '✍️ 바코드 직접 입력'}
             </button>
 
-            {/* <BarcodeScannerCom onScanSuccess={(code) => { handleBarcode(code);}}/> */}
-            
-            {showManualInput && (<ManualInputCom onBarcodeSubmit={handleBarcode} /> )}
-
-            {/* {scannerActive && (<BarcodeScannerCom onScanSuccess={(code) => handleBarcode(code)} />)} */}
+            {showManualInput ? (
+              <ManualInputCom onBarcodeSubmit={handleBarcode} />
+            ) : (
+              scannerActive && (
+                <BarcodeScannerCom onScanSuccess={(code) => handleBarcode(code)} />
+              )
+            )}
 
             <CartListCom cart={cart} onIncrease={handleIncrease} onDecrease={handleDecrease} />
             <PaymentSummaryCom cart={cart} />
