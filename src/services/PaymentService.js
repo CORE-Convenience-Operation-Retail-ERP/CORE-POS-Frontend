@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./axiosInstance";
 
 export const savePayment = async (paymentData) => {
     try {
@@ -6,7 +6,7 @@ export const savePayment = async (paymentData) => {
 
         console.log("💳 [결제 요청 DTO 전송 전] paymentData:", JSON.stringify(paymentData, null, 2));
 
-        const response = await axios.post(
+        const response = await api.post(
             `/api/pos/pay`,
             paymentData,
             {

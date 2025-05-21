@@ -1,4 +1,3 @@
-// src/components/common/HeaderCom.js
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 

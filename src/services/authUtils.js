@@ -1,9 +1,11 @@
-import axios from 'axios';
+import api from "./axiosInstance";
 
+// 토큰을 인스턴스에 설정
 export const setAuthHeader = (token) => {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
+// localStorage에서 토큰 불러와 설정
 export const loadAuthHeaderFromStorage = () => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -11,6 +13,7 @@ export const loadAuthHeaderFromStorage = () => {
   }
 };
 
+// 로그인 응답을 저장하고, axios 헤더 설정
 export const saveAuthToStorage = (data) => {
   localStorage.setItem("accessToken", data.token);
   setAuthHeader(data.token); 

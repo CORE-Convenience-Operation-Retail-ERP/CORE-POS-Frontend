@@ -4,7 +4,7 @@ import CartListCom from "../components/CartListCom";
 import PaymentButtonCom from "../components/payment/PaymentButtonCom";
 import BarcodeScannerCom from "../components/BarcodeScannerCom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
-import axios from "axios";
+import api from "../services/axiosInstance";
 import DisposalModal from "../components/DisposalModal";
 import { fetchRelatedProducts } from "../services/fetchRelatedProducts";
 import { fetchFoodProduct } from "../services/fetchFoodProduct";
@@ -21,7 +21,7 @@ function OrderCon(){
       setScannerActive(false); // 일시 중지
     
       try {
-        const response = await axios.get(`/api/barcode`, {
+        const response = await api.get(`/api/barcode`, {
           params: { code: barcode },
         });
     

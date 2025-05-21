@@ -1,10 +1,10 @@
-import axios from 'axios';
+import api from './axiosInstance';
 
 export const registerDisposal = async (disposalData) => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await axios.post("/api/pos/disposals", disposalData, {
+    const response = await api.post("/api/pos/disposals", disposalData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

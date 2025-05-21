@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/axiosInstance";
 import BarcodeScannerCom from "../components/BarcodeScannerCom";
 
 function BarcodeSearch() {
@@ -11,7 +11,7 @@ function BarcodeSearch() {
       const finalCode = typeof code === "string" ? code : String(code);
       console.log("🔍 API 요청 바코드:", finalCode);
   
-      const response = await axios.get(`/api/barcode`, {
+      const response = await api.get(`/api/barcode`, {
         params: { code: finalCode },
       });
   
