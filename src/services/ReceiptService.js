@@ -1,10 +1,9 @@
-import api from "./axiosInstance";
-
+import axios from "axios";
 
 export const fetchReceipt = async (transactionId) => {
   const token = localStorage.getItem("accessToken");
   try {
-    const response = await api.get(`/api/pos/receipt/${transactionId}`, {
+    const response = await axios.get(`/api/pos/receipt/${transactionId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

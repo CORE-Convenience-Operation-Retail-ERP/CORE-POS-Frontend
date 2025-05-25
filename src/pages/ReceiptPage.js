@@ -54,26 +54,29 @@ const ReceiptPage = () => {
         <hr />
 
         {receipt.items.map((item, idx) => (
-        <div key={idx} style={{ marginBottom: "6px" }}>
-        <div>
-            {item.productName}
-            {item.isPromo === 2 && " (1+1)"}
-            {item.isPromo === 3 && " (2+1)"}
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>{item.salesQuantity} x {item.unitPrice?.toLocaleString()} ={" "}</span>
-          <span>{(item.unitPrice * item.salesQuantity).toLocaleString()}원</span>
-        </div>
-        {/* 할인 적용 시 최종 결제 금액 따로 표시 */}
-        {item.discountPrice > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#888" }}>
-            <span>할인 적용</span>
-            <span>{item.finalAmount?.toLocaleString()}원</span>
+          <div key={idx} style={{ marginBottom: "6px" }}>
+            <div>{item.productName}</div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span>
+                {item.salesQuantity} x {item.unitPrice?.toLocaleString()} =
+              </span>
+              <span>{(item.unitPrice * item.salesQuantity).toLocaleString()}원</span>
+            </div>
+            {item.discountPrice > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "12px",
+                  color: "#888",
+                }}
+              >
+                <span>할인 적용</span>
+                <span>{item.finalAmount?.toLocaleString()}원</span>
+              </div>
+            )}
           </div>
-        )}
-        </div>
-    ))}
-
+        ))}
 
         <hr />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -110,17 +113,18 @@ const ReceiptPage = () => {
         <div style={{ textAlign: "center", fontSize: "11px", color: "#555" }}>
           감사합니다. 또 방문해주세요!
         </div>
-        <div style={{
-          textAlign: "center",
-          fontSize: "12px",
-          marginTop: "10px",
-          letterSpacing: "2px"
-        }}>
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "12px",
+            marginTop: "10px",
+            letterSpacing: "2px",
+          }}
+        >
           ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         </div>
       </div>
 
-      {/* 인쇄 버튼 제외 */}
       <button
         onClick={() => window.print()}
         className="print-hidden"

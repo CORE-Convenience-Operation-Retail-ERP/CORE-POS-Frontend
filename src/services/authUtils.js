@@ -1,8 +1,8 @@
-import api from "./axiosInstance";
+import axios from 'axios';
 
 // 토큰을 인스턴스에 설정
 export const setAuthHeader = (token) => {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
 // localStorage에서 토큰 불러와 설정

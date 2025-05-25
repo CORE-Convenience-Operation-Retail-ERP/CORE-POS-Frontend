@@ -1,22 +1,7 @@
+import { calculateDiscount } from "../../utils/paymentUtils";
+
 const PaymentSummaryCom = ({ cart }) => {
   const items = Object.values(cart);
-
-  // 할인 계산 로직 분리
-  const calculateDiscount = (item) => {
-    const { price = 0, quantity = 0, isPromo = 0 } = item;
-
-    if (isPromo === 2) {
-      // 1+1: 하나 무료
-      return Math.floor(quantity / 2) * price;
-    }
-
-    if (isPromo === 3) {
-      // 2+1: 3개 중 1개 무료
-      return Math.floor(quantity / 3) * price;
-    }
-
-    return 0;
-  };
 
   // 총 정가 (할인 전 가격)
   const totalPrice = items.reduce(
@@ -34,28 +19,92 @@ const PaymentSummaryCom = ({ cart }) => {
   const finalAmount = totalPrice - totalDiscount;
 
   return (
-    <div style={{ marginTop: '16px', padding: '12px', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h4>💳 결제 요약</h4>
-      <p>총 상품 금액: {totalPrice.toLocaleString()}원</p>
-      {totalDiscount > 0 && (
-        <p style={{ color: 'green' }}>
-          총 할인 금액: -{totalDiscount.toLocaleString()}원
-        </p>
-      )}
-      <p><strong>최종 결제 금액: {finalAmount.toLocaleString()}원</strong></p>
+    <div style={{ 
+      marginTop: '16px', 
+      padding: '20px', 
+      background: '#f8fafc',
+      borderRadius: '12px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+    }}>
+      <h4 style={{ 
+        margin: '0 0 16px 0',
+        color: '#1e293b',
+        fontSize: '18px',
+        fontWeight: '600'
+      }}>💳 주문 내역</h4>
+      
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        marginBottom: '12px',
+        color: '#64748b',
+        fontSize: '15px'
+      }}>
+        <span>상품 금액</span>
+        <span>{totalPrice.toLocaleString()}원</span>
+      </div>
 
-      {/* 추가: 어떤 항목에 얼마나 할인됐는지 개별 표시 */}
-      {items.map((item) => {
-        const discount = calculateDiscount(item);
-        if (discount > 0) {
-          return (
-            <p key={item.productId} style={{ fontSize: "13px", marginLeft: "10px", color: "#555" }}>
-              👉 <strong>{item.name}</strong> 프로모션 적용 할인: -{discount.toLocaleString()}원
-            </p>
-          );
-        }
-        return null;
-      })}
+      {totalDiscount > 0 && (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          marginBottom: '12px',
+          color: '#059669',
+          fontSize: '15px'
+        }}>
+          <span>할인 금액</span>
+          <span>-{totalDiscount.toLocaleString()}원</span>
+        </div>
+      )}
+
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        marginTop: '16px',
+        paddingTop: '16px',
+        borderTop: '1px solid #e2e8f0',
+        color: '#1e293b',
+        fontSize: '16px',
+        fontWeight: '600'
+      }}>
+        <span>결제 예정 금액</span>
+        <span>{finalAmount.toLocaleString()}원</span>
+      </div>
+
+      {/* 프로모션 할인 내역 */}
+      {items.some(item => calculateDiscount(item) > 0) && (
+        <div style={{ 
+          marginTop: '16px',
+          padding: '12px',
+          background: '#f1f5f9',
+          borderRadius: '8px'
+        }}>
+          <p style={{ 
+            margin: '0 0 8px 0',
+            color: '#64748b',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}>🎁 프로모션 적용 내역</p>
+          {items.map((item) => {
+            const discount = calculateDiscount(item);
+            if (discount > 0) {
+              return (
+                <div key={item.productId} style={{ 
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: "13px",
+                  color: "#475569",
+                  marginBottom: '4px'
+                }}>
+                  <span>{item.name}</span>
+                  <span>-{discount.toLocaleString()}원</span>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+      )}
     </div>
   );
 };

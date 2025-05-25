@@ -1,3 +1,5 @@
+import React from "react";
+
 const SettlementResultModal = ({ isOpen, onClose, result }) => {
   if (!isOpen) return null;
 
@@ -5,7 +7,7 @@ const SettlementResultModal = ({ isOpen, onClose, result }) => {
     DAILY: "일별",
     SHIFT: "교대",
     MONTHLY: "월별",
-    YEARLY: "연별"
+    YEARLY: "연별",
   };
 
   const {
@@ -18,25 +20,32 @@ const SettlementResultModal = ({ isOpen, onClose, result }) => {
     refundTotal,
     finalAmount,
     transactionCount,
-    refundCount
+    refundCount,
   } = result;
+
+  const displayType = typeLabelMap[type?.toUpperCase()] || type || "알 수 없음";
+  const displayMessage = success
+    ? "✔ 정산이 완료되었습니다."
+    : `❌ ${message || "정산에 실패했습니다."}`;
 
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
         <h2 style={headerStyle}>📊 정산 {success ? "성공" : "실패"}</h2>
 
-        <p style={{
-          fontSize: "16px",
-          color: success ? "#10b981" : "#ef4444",
-          fontWeight: "bold",
-          marginBottom: "12px"
-        }}>
-          {success ? "✔ 정산이 완료되었습니다." : `❌ ${message}`}
+        <p
+          style={{
+            fontSize: "16px",
+            color: success ? "#10b981" : "#ef4444",
+            fontWeight: "bold",
+            marginBottom: "12px",
+          }}
+        >
+          {displayMessage}
         </p>
 
-        <div style={infoStyle}>정산일: {date}</div>
-        <div style={infoStyle}>정산유형: {typeLabelMap[type] || type}</div>
+        <div style={infoStyle}>정산일: {date || "미입력"}</div>
+        <div style={infoStyle}>정산유형: {displayType}</div>
 
         {success && (
           <>
@@ -49,7 +58,9 @@ const SettlementResultModal = ({ isOpen, onClose, result }) => {
           </>
         )}
 
-        <button onClick={onClose} style={buttonStyle}>확인</button>
+        <button onClick={onClose} style={buttonStyle}>
+          확인
+        </button>
       </div>
     </div>
   );
@@ -66,7 +77,7 @@ const overlayStyle = {
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1000,
-  padding: "16px"
+  padding: "16px",
 };
 
 const modalStyle = {
@@ -76,19 +87,19 @@ const modalStyle = {
   maxWidth: "360px",
   padding: "24px 20px",
   boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-  textAlign: "center"
+  textAlign: "center",
 };
 
 const headerStyle = {
   fontSize: "20px",
   marginBottom: "16px",
-  color: "#111827"
+  color: "#111827",
 };
 
 const infoStyle = {
   fontSize: "14px",
   marginBottom: "6px",
-  color: "#374151"
+  color: "#374151",
 };
 
 const buttonStyle = {
@@ -100,7 +111,7 @@ const buttonStyle = {
   padding: "10px 20px",
   fontSize: "15px",
   cursor: "pointer",
-  width: "100%"
+  width: "100%",
 };
 
 export default SettlementResultModal;
