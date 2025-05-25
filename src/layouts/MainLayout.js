@@ -10,13 +10,15 @@ function MainLayout() {
   if (isLoginPage) return <Outlet />;
 
   return (
+    <>
     <PageCardWrapper>
       <HeaderCom />
       <div style={{ flex: 1, overflowY: "auto" }}>
         <Outlet />
       </div>
-      <BottomTabCom />
     </PageCardWrapper>
+    <BottomTabCom />
+    </>
   );
 }
 
