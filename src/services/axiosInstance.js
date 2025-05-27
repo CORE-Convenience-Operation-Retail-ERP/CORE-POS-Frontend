@@ -3,6 +3,8 @@ import axios from "axios";
 // 환경변수에서 API Base URL 가져오기
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
+console.log("🌍 전체 환경변수:", process.env);
+
 if (!baseURL) {
     console.warn("❌ [axiosInstance] REACT_APP_API_BASE_URL 환경변수가 정의되지 않았습니다.");
   } else {
