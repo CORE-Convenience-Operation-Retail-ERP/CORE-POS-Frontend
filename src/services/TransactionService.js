@@ -1,11 +1,11 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 // 거래내역 조회
 export const fetchTransactions = async (storeId) => {
   try {
     const token = localStorage.getItem("accessToken");
 
-    const response = await axios.get(`/api/pos/transactions?storeId=${storeId}`, {
+    const response = await axiosInstance.get(`/api/pos/transactions?storeId=${storeId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export const refundTransaction = async (transactionId, refundReason) => {
   try {
     const token = localStorage.getItem("accessToken");
 
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       `/api/pos/refund/${transactionId}?refundReason=${encodeURIComponent(refundReason)}`,
       {},
       {

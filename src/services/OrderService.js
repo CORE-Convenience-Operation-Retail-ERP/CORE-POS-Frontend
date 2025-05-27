@@ -1,11 +1,11 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const BASE_URL = "https://api.example.com/products"; // 실제 API 주소로 대체하세요
 
 const OrderService = {
   async getProductByBarcode(barcode) {
     try {
-      const response = await axios.get(`${BASE_URL}/barcode/${barcode}`);
+      const response = await axiosInstance.get(`${BASE_URL}/barcode/${barcode}`);
       return response.data;
     } catch (error) {
       console.error("❌ 바코드 조회 API 실패:", error);
@@ -22,7 +22,7 @@ const OrderService = {
     }));
 
     try {
-      const response = await axios.post("/api/order", { items });
+      const response = await axiosInstance.post("/api/order", { items });
       return response.data;
     } catch (error) {
       console.error("❌ 주문 생성 실패:", error);
