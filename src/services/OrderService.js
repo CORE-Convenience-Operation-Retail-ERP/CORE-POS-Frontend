@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const BASE_URL = "https://api.example.com/products"; // 실제 API 주소로 대체하세요
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://api.corepos.store";
 
 const OrderService = {
   async getProductByBarcode(barcode) {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// 환경변수에서 API Base URL 가져오기
-const baseURL = process.env.REACT_APP_API_BASE_URL;
+// 환경변수에서 API Base URL 가져오기 (실무용: 환경변수 + 기본값)
+const baseURL = process.env.REACT_APP_API_BASE_URL || "https://api.corepos.store";
 
 console.log("🌍 [axiosInstance] 전체 환경변수 객체:", JSON.stringify(process.env, null, 2));
 
