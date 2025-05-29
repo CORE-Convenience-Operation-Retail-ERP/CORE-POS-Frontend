@@ -137,7 +137,7 @@ const ReceiptPage = () => {
         <p style={{ textAlign: "center", fontSize: "12px", marginBottom: "4px" }}>
           고객님의 소중한 의견을 들려주세요!
           <br />
-          QR을 스캔하여 점포 이용 만족도 조사에 참여해주세요.
+          QR을 스캔하여 점포 만족도 조사에 참여해주세요.
         </p>
         <img
           src="/qr.png"
@@ -147,21 +147,11 @@ const ReceiptPage = () => {
 
         {/* 바코드 표시 */}
         <div style={{ textAlign: "center", marginTop: "12px" }}>
-          <Barcode value={receipt.transactionId.toString()} width={1.4} height={40} fontSize={12} />
+          <Barcode value={receipt.transactionId.toString()} width={1.4} height={40} displayValue={false} />
         </div>
 
         <div style={{ textAlign: "center", fontSize: "11px", color: "#555", marginTop: "10px" }}>
           감사합니다. 또 방문해주세요!
-        </div>
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: "12px",
-            marginTop: "10px",
-            letterSpacing: "2px",
-          }}
-        >
-          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         </div>
       </div>
 
