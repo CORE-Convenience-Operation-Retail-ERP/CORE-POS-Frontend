@@ -19,7 +19,7 @@ const convertGenderToCode = (gender) => {
   return gender === "남" ? 0 : 1;
 };
 
-const PaymentButtonCom = ({ cart, ageGroup, gender }) => {
+const PaymentButtonCom = ({ cart, ageGroup, gender, onPaymentComplete }) => {
   const navigate = useNavigate();
   const items = Object.entries(cart);
 
@@ -79,15 +79,21 @@ const PaymentButtonCom = ({ cart, ageGroup, gender }) => {
             };
 
             await savePayment(paymentData);
-            alert("결제가 완료되었습니다.");
-            navigate("/pos/order");
+            // 모바일 환경에서의 라우팅 안정성을 위해 setTimeout 사용
+            setTimeout(() => {
+              navigate("/pos/order", { replace: true });
+            }, 100);
           } catch (e) {
             alert("결제는 성공했지만 서버 저장에 실패했습니다.");
-            navigate("/pos/order");
+            setTimeout(() => {
+              navigate("/pos/order", { replace: true });
+            }, 100);
           }
         } else {
           alert(rsp.error_msg);
-          navigate("/pos/order");
+          setTimeout(() => {
+            navigate("/pos/order", { replace: true });
+          }, 100);
         }
       }
     );

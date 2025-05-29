@@ -20,7 +20,7 @@ const convertGenderToCode = (gender) => {
   return gender === "남" ? 0 : 1;
 };
 
-const CashPaymentCom = ({ cart, amount, ageGroup, gender }) => {
+const CashPaymentCom = ({ cart, amount, ageGroup, gender, onPaymentComplete }) => {
   const navigate = useNavigate();
   const [receiptType, setReceiptType] = useState("소득공제");
   const [identifier, setIdentifier] = useState("");
@@ -77,11 +77,15 @@ const CashPaymentCom = ({ cart, amount, ageGroup, gender }) => {
       };
 
       await savePayment(paymentData);
-      alert("현금 결제가 완료되었습니다.");
-      navigate("/pos/order");
+      // 모바일 환경에서의 라우팅 안정성을 위해 setTimeout 사용
+      setTimeout(() => {
+        navigate("/pos/order", { replace: true });
+      }, 100);
     } catch (e) {
       alert("결제 저장 실패: " + e.message);
-      navigate("/pos/order");
+      setTimeout(() => {
+        navigate("/pos/order", { replace: true });
+      }, 100);
     }
   };
 

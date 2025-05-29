@@ -51,17 +51,16 @@ const UnifiedSettlementCon = () => {
     if (type === "SHIFT") {
       fetchPartTimerList()
         .then((data) => {
-          console.log("[✅ 아르바이트 목록 도착]", data);
+          console.log("[아르바이트 목록 도착]", data);
           setPartTimerList(data);
         })
         .catch(() => {
-          console.log("[⚠️ 아르바이트 목록 로딩 실패]");
+          console.log("[아르바이트 목록 로딩 실패]");
           setPartTimerList([]);
         });
     }
   }, [type]);
 
-  // 이 부분이 핵심! e를 명시적으로 받음
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -149,7 +148,14 @@ const UnifiedSettlementCon = () => {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "20px",
+        maxWidth: "600px",
+        margin: "0 auto",
+        overflowY: recentSettlements.length === 0 && !preview ? "hidden" : "auto",
+      }}
+    >
       <UnifiedSettlementForm
         type={type}
         onTypeChange={setType}

@@ -130,7 +130,15 @@ function OrderCon({ onGoToPayment }) {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "480px", margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "20px",
+        maxWidth: "480px",
+        margin: "0 auto",
+        minHeight: "calc(100vh - 64px)",
+        overflowY: Object.keys(cart).length === 0 ? "hidden" : "auto",
+      }}
+    >
       {/* 바코드 수동 입력 */}
       <div style={{ textAlign: "right", marginTop: "20px", marginBottom: "20px" }}>
         <ManualInputCom onBarcodeSubmit={handleBarcode} />
@@ -157,12 +165,14 @@ function OrderCon({ onGoToPayment }) {
 
       {/* 하단 버튼 */}
       {Object.keys(cart).length > 0 && (
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-          gap: "10px"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "20px",
+            gap: "10px",
+          }}
+        >
           <button
             onClick={() => onGoToPayment(cart)}
             style={{

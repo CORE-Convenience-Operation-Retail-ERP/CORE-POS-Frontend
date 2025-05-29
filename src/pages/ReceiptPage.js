@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchReceipt } from "../services/ReceiptService";
+import Barcode from "react-barcode";
 import "../styles/ReceiptPage.css";
 
 const ReceiptPage = () => {
   const { transactionId } = useParams();
+  const navigate = useNavigate();
   const [receipt, setReceipt] = useState(null);
 
   useEffect(() => {
@@ -19,10 +21,28 @@ const ReceiptPage = () => {
     load();
   }, [transactionId]);
 
-  if (!receipt) return <div>영수증을 불러오는 중...</div>;
+  if (!receipt)
+    return <div style={{ textAlign: "center", marginTop: "40px" }}>영수증을 불러오는 중...</div>;
 
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
+      {/* 닫기 버튼 */}
+      <button
+        onClick={() => navigate("/pos/order")}
+        className="print-hidden"
+        style={{
+          position: "fixed",
+          top: "12px",
+          right: "16px",
+          fontSize: "18px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        ✕
+      </button>
+
       <div
         id="receipt-box"
         style={{
@@ -44,12 +64,16 @@ const ReceiptPage = () => {
 
         <p>거래번호 : {receipt.transactionId}</p>
         <p>
-          결제일시 : {new Date(receipt.paidAt).toLocaleDateString("ko-KR")}
-        </p>
-        <p>
+          결제일시 : {new Date(receipt.paidAt).toLocaleDateString("ko-KR")}<br />
           결제시간 : {new Date(receipt.paidAt).toLocaleTimeString("ko-KR")}
         </p>
-        <p>결제수단 : {receipt.paymentMethod}</p>
+        <p>결제수단 : {receipt.paymentMethod === "CARD" ? "카드" : "현금"}</p>
+
+        {receipt.cashReceipt && (
+          <p>
+            현금영수증 : {receipt.cashReceipt.type} ({receipt.cashReceipt.identity})
+          </p>
+        )}
 
         <hr />
 
@@ -104,13 +128,29 @@ const ReceiptPage = () => {
           <>
             <hr />
             <p style={{ color: "red", marginTop: "10px" }}>※ 환불된 거래입니다</p>
-            <p>환불 사유: {receipt.refundReason}</p>
-            <p>환불 금액: {receipt.refundAmount?.toLocaleString()}원</p>
           </>
         )}
 
         <hr />
-        <div style={{ textAlign: "center", fontSize: "11px", color: "#555" }}>
+
+        {/* QR 안내 문구 및 이미지 */}
+        <p style={{ textAlign: "center", fontSize: "12px", marginBottom: "4px" }}>
+          고객님의 소중한 의견을 들려주세요!
+          <br />
+          QR을 스캔하여 점포 이용 만족도 조사에 참여해주세요.
+        </p>
+        <img
+          src="/qr.png"
+          alt="만족도 조사 QR"
+          style={{ width: "120px", display: "block", margin: "0 auto 12px" }}
+        />
+
+        {/* 바코드 표시 */}
+        <div style={{ textAlign: "center", marginTop: "12px" }}>
+          <Barcode value={receipt.transactionId.toString()} width={1.4} height={40} fontSize={12} />
+        </div>
+
+        <div style={{ textAlign: "center", fontSize: "11px", color: "#555", marginTop: "10px" }}>
           감사합니다. 또 방문해주세요!
         </div>
         <div

@@ -1,6 +1,9 @@
 @media print {
   body {
     background: white;
+    margin: 0;
+    padding: 0;
+    zoom: 90%; /* (선택) 프린트 시 한 페이지에 맞게 살짝 축소 */
   }
 
   .print-hidden {
@@ -16,5 +19,18 @@
   #receipt-box {
     box-shadow: none;
     border: none;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* (선택) 바코드 간격 줄이기 */
+  #receipt-box canvas,
+  #receipt-box img {
+    margin-bottom: 4px !important;
+    max-width: 100%;
   }
 }

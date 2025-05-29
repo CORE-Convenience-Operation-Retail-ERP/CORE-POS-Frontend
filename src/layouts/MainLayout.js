@@ -13,7 +13,7 @@ function MainLayout() {
     <>
     <PageCardWrapper>
       <HeaderCom />
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div style={{ flex: 1, overflowY: "auto", paddingBottom: "64px" }}>
         <Outlet />
       </div>
     </PageCardWrapper>

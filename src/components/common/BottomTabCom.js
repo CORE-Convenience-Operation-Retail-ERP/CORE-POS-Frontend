@@ -48,9 +48,9 @@ function BottomTabCom() {
       ))}
 
       {/* 가운데 FAB 칸 */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <FabButton onClick={() => navigate("/pos/order")}>
-          <FiCamera />
+          <FiCamera style={{ fontSize: "24px", color: "white" }} />
         </FabButton>
       </div>
 
@@ -67,6 +67,5 @@ function BottomTabCom() {
     </BottomTabBar>
   );
 }
-
 
 export default BottomTabCom;

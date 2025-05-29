@@ -27,13 +27,9 @@ const TempStorageCon = () => {
       return;
     }
 
-    // 복원 시 보관함에서 제거
     removeTempCart(id);
-
-    // 목록도 즉시 새로고침
     loadList();
 
-    // 복원된 장바구니로 이동
     localStorage.setItem("restoredCart", JSON.stringify(selected.cart));
     navigate("/pos/order", { state: { fromTemp: true } });
   };
@@ -42,15 +38,23 @@ const TempStorageCon = () => {
     const confirm = window.confirm("해당 장바구니를 삭제하시겠습니까?");
     if (!confirm) return;
     removeTempCart(id);
-    loadList(); // 삭제 후 목록 새로고침
+    loadList();
+  };
+
+  // 빈 목록일 경우 overflow 제거
+  const wrapperStyle = {
+    padding: "20px",
+    overflowY: list.length === 0 ? "hidden" : "auto",
   };
 
   return (
-    <TempCartListCom
-      tempList={list}
-      onRestore={handleLoad}
-      onDelete={handleDelete}
-    />
+    <div style={wrapperStyle}>
+      <TempCartListCom
+        tempList={list}
+        onRestore={handleLoad}
+        onDelete={handleDelete}
+      />
+    </div>
   );
 };
 

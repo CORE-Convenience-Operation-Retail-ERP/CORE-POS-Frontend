@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchTransactions, refundTransaction } from "../../services/TransactionService";
 import TransactionGroupCom from "../../components/transaction/TransactionGroupCom";
 import TransactionFilterModal from "../../components/transaction/TransactionFilterModal";
 
 const TransactionListCon = () => {
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
@@ -63,7 +65,10 @@ const TransactionListCon = () => {
     if (!customDates.from || !customDates.to) return transactions;
     return transactions.filter(tx => {
       const date = new Date(tx.paidAt);
-      return date >= customDates.from && date <= customDates.to;
+      const txDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const fromDate = new Date(customDates.from.getFullYear(), customDates.from.getMonth(), customDates.from.getDate());
+      const toDate = new Date(customDates.to.getFullYear(), customDates.to.getMonth(), customDates.to.getDate());
+      return txDate >= fromDate && txDate <= toDate;
     });
   };
 
@@ -73,6 +78,11 @@ const TransactionListCon = () => {
   useEffect(() => {
     loadTransactions();
   }, []);
+
+  // 정산 관리 페이지로 이동 함수
+  const handleGoToSettlement = () => {
+    navigate("/pos/settlement");
+  };
 
   return (
     <div style={{ padding: "16px" }}>
@@ -100,7 +110,7 @@ const TransactionListCon = () => {
           </button>
   
           <button
-            onClick={() => window.location.href = "/pos/settlement"}
+            onClick={handleGoToSettlement}
             style={{
               backgroundColor: "#3f3f3f",
               color: "#fff",

@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PaymentTabsCom from "../../components/payment/PaymentTabsCom";
 import AgeGenderSelectCom from "../../components/payment/AgeGenderSelectCom";
 import PaymentSummaryCom from "../../components/payment/PaymentSummaryCom";
 import PaymentButtonCom from "../../components/payment/PaymentButtonCom";
 import CashPaymentCom from "../../components/payment/CashPaymentCom";
 
-
 const PaymentCon = ({ cart }) => {
+  const navigate = useNavigate();
   const [paymentType, setPaymentType] = useState("CARD");
   const [ageGroup, setAgeGroup] = useState(null);
   const [gender, setGender] = useState(null);
@@ -17,6 +18,15 @@ const PaymentCon = ({ cart }) => {
     (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
     0
   );
+
+  const handlePaymentComplete = (details) => {
+    const wantsReceipt = window.confirm("영수증을 받으시겠습니까?");
+    if (wantsReceipt) {
+      navigate(`/pos/receipt/${details.merchantUid}`);
+    } else {
+      navigate("/pos/order");
+    }
+  };
 
   return (
     <div style={{ padding: "16px" }}>
@@ -41,6 +51,7 @@ const PaymentCon = ({ cart }) => {
           cart={cart}
           ageGroup={ageGroup}
           gender={gender}
+          onPaymentComplete={handlePaymentComplete}
         />
       )}
 
@@ -50,6 +61,7 @@ const PaymentCon = ({ cart }) => {
           amount={totalAmount}
           ageGroup={ageGroup}
           gender={gender}
+          onPaymentComplete={handlePaymentComplete}
         />
       )}
     </div>
