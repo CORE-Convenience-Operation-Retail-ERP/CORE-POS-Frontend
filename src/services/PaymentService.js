@@ -1,17 +1,16 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export const savePayment = async (paymentData) => {
     try {
-        const token = localStorage.getItem("accessToken");
-
+        const token = localStorage.getItem("token");
         console.log("💳 [결제 요청 DTO 전송 전] paymentData:", JSON.stringify(paymentData, null, 2));
 
-        const response = await axios.post(
+        const response = await axiosInstance.post(
             `/api/pos/pay`,
             paymentData,
             {
-                headers : {
-                    Authorization : `Bearer ${token}`,
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );

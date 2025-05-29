@@ -4,7 +4,7 @@ import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 import DisposalModal from "../components/DisposalModal";
 import { fetchRelatedProducts } from "../services/fetchRelatedProducts";
 import { fetchFoodProduct } from "../services/fetchFoodProduct";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import { saveTempCart } from "../services/tempStorageService";
 import BarcodeScannerCom from "../components/order/BarcodeScannerCom";
 import CartListCom from "../components/order/CartListCom";
@@ -55,9 +55,7 @@ function OrderCon({ onGoToPayment }) {
 
   const handleBarcode = async (barcode) => {
     try {
-      const response = await axios.get(`/api/barcode`, {
-        params: { code: barcode },
-      });
+      const response = await axiosInstance.get(`/api/barcode`, { params: { code: barcode } });
       const product = response.data;
 
       if (!product || (!product.productName && !product.PRDLST_NM)) {

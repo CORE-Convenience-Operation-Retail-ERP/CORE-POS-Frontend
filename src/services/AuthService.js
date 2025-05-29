@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axiosInstance from "./axiosInstance";
 
 export const loginRequest = async (loginData) => {
   try {
-    const response = await axios.post("/api/auth/login", loginData);
+    const response = await axiosInstance.post("/api/auth/login", loginData);
     const data = response.data;
 
     if (data.deptId !== 3) {

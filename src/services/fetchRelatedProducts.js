@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const SERVICE_KEY = "275556b048794838ae7e";
 const SERVICE_ID = "C005";
@@ -6,7 +6,7 @@ const API_URL = `https://openapi.foodsafetykorea.go.kr/api/${SERVICE_KEY}/${SERV
 
 export const fetchRelatedProducts = async (barcode) => {
   try {
-    const response = await axios.get(API_URL, {
+    const response = await axiosInstance.get(API_URL, {
       params: {
         BAR_CD: barcode
       }

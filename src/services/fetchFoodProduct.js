@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 // 공공데이터포털에서 발급받은 인코딩된 API 키
 const SERVICE_KEY = "275556b048794838ae7e";
@@ -6,7 +6,7 @@ const API_URL = "https://apis.data.go.kr/B553748/CertImgListService/getCertImgLi
 
 export const fetchFoodProduct = async (barcode) => {
   try {
-    const response = await axios.get(API_URL, {
+    const response = await axiosInstance.get(API_URL, {
       params: {
         ServiceKey: SERVICE_KEY,
         barcode: barcode,
