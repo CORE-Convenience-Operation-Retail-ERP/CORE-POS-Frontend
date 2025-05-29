@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
-const BarcodeScannerCom = ({ onScanSuccess, onRetry, scanTimeout = 15000 }) => {
+const BarcodeScannerCom = ({ onScanSuccess }) => {
   const isScannedRef = useRef(false);
   const scannerRef = useRef(null);
-  const timeoutRef = useRef(null);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [statusMsg, setStatusMsg] = useState("바코드를 카메라에 비춰주세요");
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    isScannedRef.current = false;
-    setErrorMsg("");
+    // 이미 초기화되어 있다면 중복 초기화 방지
+    if (scannerRef.current) return;
 
+    // 스캐너 인스턴스 생성
     const scanner = new Html5QrcodeScanner(
       "reader",
       {
         fps: 10,
         qrbox: (w, h) => {
           const size = Math.floor(Math.min(w, h) * 0.6);
-          return { width: size, height: size };
+          return { width: Math.max(size, 100), height: Math.max(size, 100) };
         },
         rememberLastUsedCamera: true,
         aspectRatio: 1.0,
@@ -32,28 +33,49 @@ const BarcodeScannerCom = ({ onScanSuccess, onRetry, scanTimeout = 15000 }) => {
       (decodedText) => {
         if (!isScannedRef.current && decodedText) {
           isScannedRef.current = true;
-          clearTimeout(timeoutRef.current);
+          setStatusMsg("상품을 인식했습니다");
+          setIsError(false);
+
           onScanSuccess(decodedText);
 
-          scannerRef.current
-            ?.pause()
-            .catch((e) => console.error("❌ 스캐너 일시정지 실패:", e));
+          // 1초 후 다시 스캔 가능하도록 설정 및 메시지 초기화
+          setTimeout(() => {
+            isScannedRef.current = false;
+            setStatusMsg("바코드를 카메라에 비춰주세요");
+          }, 1000);
+        } else {
+           // 이미 스캔 처리 중인 경우 무시
         }
       },
-      (error) => {}
+      (error) => {
+        // 스캔 실패 시 오류 메시지 표시 및 자동 재시도
+        if (!isScannedRef.current) {
+          setStatusMsg("바코드를 인식하지 못했습니다. 다시 비춰주세요");
+          setIsError(true);
+
+          // 2초 후 오류 상태 해제 및 메시지 초기화 (자동 재시도)
+          setTimeout(() => {
+             setIsError(false);
+             setStatusMsg("바코드를 카메라에 비춰주세요");
+          }, 2000); // 오류 메시지 표시 시간
+        }
+      }
     );
 
     return () => {
-      clearTimeout(timeoutRef.current);
-      scannerRef.current
-        ?.clear()
-        .catch((e) => console.error("❌ 언마운트 시 스캐너 클리어 실패:", e));
+      scannerRef.current?.clear()
+        .then(() => {
+          scannerRef.current = null;
+        })
+        .catch((e) => {
+          console.error("언마운트 시 스캐너 클리어 실패:", e);
+          scannerRef.current = null; // 실패해도 ref는 null로 설정
+        });
     };
-  }, [onScanSuccess, scanTimeout]);
+  }, [onScanSuccess]); // onScanSuccess가 변경될 때만 effect 재실행
 
   return (
     <div>
-      <h3 style={{ marginBottom: "16px", color: "#333", fontSize: "16px" }}></h3>
       <div
         id="reader"
         style={{
@@ -64,9 +86,17 @@ const BarcodeScannerCom = ({ onScanSuccess, onRetry, scanTimeout = 15000 }) => {
           overflow: "hidden",
         }}
       />
-      {errorMsg && (
-        <div style={{ marginTop: "12px" }}>
-          <p style={{ color: "red", fontSize: "14px" }}>{errorMsg}</p>
+      {statusMsg && (
+        <div style={{ marginTop: "12px", textAlign: "center" }}>
+          <p
+            style={{
+              color: isError ? "red" : "#333",
+              fontSize: "14px",
+              fontWeight: "bold",
+            }}
+          >
+            {statusMsg}
+          </p>
         </div>
       )}
     </div>

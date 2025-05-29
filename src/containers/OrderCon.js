@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 import DisposalModal from "../components/DisposalModal";
@@ -10,14 +10,10 @@ import BarcodeScannerCom from "../components/order/BarcodeScannerCom";
 import CartListCom from "../components/order/CartListCom";
 import ManualInputCom from "../components/order/ManualInputCom";
 
-const SCAN_RESET_DELAY = 1000;
-
 function OrderCon({ onGoToPayment }) {
   const [cart, setCart] = useState({});
-  const [scannerActive, setScannerActive] = useState(true);
   const [scannedProduct, setScannedProduct] = useState(null);
   const [isDisposalModalOpen, setIsDisposalModalOpen] = useState(false);
-  const isScannedRef = useRef(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -58,12 +54,10 @@ function OrderCon({ onGoToPayment }) {
   };
 
   const handleBarcode = async (barcode) => {
-    if (isScannedRef.current) return;
-    isScannedRef.current = true;
-    setScannerActive(false);
-
     try {
-      const response = await axios.get(`/api/barcode`, { params: { code: barcode } });
+      const response = await axios.get(`/api/barcode`, {
+        params: { code: barcode },
+      });
       const product = response.data;
 
       if (!product || (!product.productName && !product.PRDLST_NM)) {
@@ -98,11 +92,6 @@ function OrderCon({ onGoToPayment }) {
     } catch (error) {
       console.error("상품 정보 가져오기 실패:", error);
       await handleExternalFallback(barcode);
-    } finally {
-      setTimeout(() => {
-        setScannerActive(true);
-        isScannedRef.current = false;
-      }, SCAN_RESET_DELAY);
     }
   };
 
@@ -139,33 +128,28 @@ function OrderCon({ onGoToPayment }) {
 
   const handleSaveTempCart = () => {
     saveTempCart(cart);
-    alert("🗂️ 임시보관함에 저장되었습니다.");
+    alert("임시보관함에 저장되었습니다.");
   };
 
   return (
     <div style={{ padding: "20px", maxWidth: "480px", margin: "0 auto" }}>
-      {/* 바코드 입력 */}
+      {/* 바코드 수동 입력 */}
       <div style={{ textAlign: "right", marginTop: "20px", marginBottom: "20px" }}>
         <ManualInputCom onBarcodeSubmit={handleBarcode} />
       </div>
 
       {/* 스캐너 */}
       <div style={{ marginBottom: "15px" }}>
-      {scannerActive && (
-        <BarcodeScannerCom
-          onScanSuccess={handleBarcode}
-          onRetry={() => setScannerActive(true)}
-        />
-      )}
+        <BarcodeScannerCom onScanSuccess={handleBarcode} />
       </div>
 
       {/* 장바구니 */}
       <div style={{ marginBottom: "20px" }}>
-      <CartListCom
-        cart={cart}
-        onIncrease={handleIncrease}
-        onDecrease={handleDecrease}
-      />
+        <CartListCom
+          cart={cart}
+          onIncrease={handleIncrease}
+          onDecrease={handleDecrease}
+        />
       </div>
 
       {/* 결제 요약 */}
@@ -175,7 +159,12 @@ function OrderCon({ onGoToPayment }) {
 
       {/* 하단 버튼 */}
       {Object.keys(cart).length > 0 && (
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px", gap: "10px" }}>
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+          gap: "10px"
+        }}>
           <button
             onClick={() => onGoToPayment(cart)}
             style={{
@@ -214,10 +203,7 @@ function OrderCon({ onGoToPayment }) {
       {/* 폐기 모달 */}
       <DisposalModal
         isOpen={isDisposalModalOpen}
-        onClose={() => {
-          setIsDisposalModalOpen(false);
-          setScannerActive(true);
-        }}
+        onClose={() => setIsDisposalModalOpen(false)}
         productInfo={scannedProduct}
       />
     </div>
