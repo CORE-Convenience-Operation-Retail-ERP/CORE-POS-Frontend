@@ -21,7 +21,8 @@
     border: none;
     margin: 0 auto !important;
     padding: 0 !important;
-    width: 100% !important;
+    /* width: 100% !important; */ /* 이 부분을 주석 처리하거나 제거 */
+    max-width: 280px; /* 인쇄 시 최대 폭 설정 (예: 80mm) */
     height: auto !important;
     min-height: auto !important;
     page-break-inside: avoid !important;

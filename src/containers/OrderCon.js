@@ -14,6 +14,7 @@ function OrderCon({ onGoToPayment }) {
   const [cart, setCart] = useState({});
   const [scannedProduct, setScannedProduct] = useState(null);
   const [isDisposalModalOpen, setIsDisposalModalOpen] = useState(false);
+  const [showScanner, setShowScanner] = useState(true); // 🔄 스캐너 mount 관리
   const location = useLocation();
 
   useEffect(() => {
@@ -29,6 +30,10 @@ function OrderCon({ onGoToPayment }) {
       }
     }
   }, [location.state]);
+
+  useEffect(() => {
+    return () => setShowScanner(false); // 언마운트 시 스캐너 강제 해제
+  }, []);
 
   const handleExternalFallback = async (barcode) => {
     const external = await fetchFoodProduct(barcode);
@@ -139,15 +144,17 @@ function OrderCon({ onGoToPayment }) {
         overflowY: Object.keys(cart).length === 0 ? "hidden" : "auto",
       }}
     >
-      {/* 바코드 수동 입력 */}
+      {/* 수동 입력 */}
       <div style={{ textAlign: "right", marginTop: "20px", marginBottom: "20px" }}>
         <ManualInputCom onBarcodeSubmit={handleBarcode} />
       </div>
 
-      {/* 스캐너 */}
-      <div style={{ marginBottom: "15px" }}>
-        <BarcodeScannerCom onScanSuccess={handleBarcode} />
-      </div>
+      {/* 바코드 스캐너 */}
+      {showScanner && (
+        <div style={{ marginBottom: "15px" }}>
+          <BarcodeScannerCom onScanSuccess={handleBarcode} />
+        </div>
+      )}
 
       {/* 장바구니 */}
       <div style={{ marginBottom: "20px" }}>
@@ -163,7 +170,7 @@ function OrderCon({ onGoToPayment }) {
         <PaymentSummaryCom cart={cart} />
       </div>
 
-      {/* 하단 버튼 */}
+      {/* 버튼 */}
       {Object.keys(cart).length > 0 && (
         <div
           style={{

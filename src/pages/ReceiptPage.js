@@ -31,13 +31,15 @@ const ReceiptPage = () => {
         onClick={() => navigate("/pos/order")}
         className="print-hidden"
         style={{
-          position: "fixed",
+          position: "absolute",
           top: "12px",
           right: "16px",
           fontSize: "18px",
           background: "transparent",
           border: "none",
           cursor: "pointer",
+          color: "#000",
+          fontWeight: "bold",
         }}
       >
         ✕
@@ -69,14 +71,19 @@ const ReceiptPage = () => {
         </p>
         <p>결제수단 : {receipt.paymentMethod === "CARD" ? "카드" : "현금"}</p>
 
-        {receipt.cashReceipt && (
-          <p>
-            현금영수증 : {receipt.cashReceipt.type} ({receipt.cashReceipt.identity})
-          </p>
-        )}
+        <hr />
+
+        {/* 환불 규정 */}
+        <p style={{ fontSize: "11px", color: "#444", marginBottom: "6px" }}>
+          * 정부방침에 의해 교환/환불은 반드시 영수증을 지참하셔야 하며,<br />
+          <span style={{ fontWeight: "bold" }}>
+            카드결제는 30일이내 카드와 영수증 지참 시 가능합니다.
+          </span>
+        </p>
 
         <hr />
 
+        {/* 상품 목록 */}
         {receipt.items.map((item, idx) => (
           <div key={idx} style={{ marginBottom: "6px" }}>
             <div>{item.productName}</div>
@@ -103,6 +110,8 @@ const ReceiptPage = () => {
         ))}
 
         <hr />
+
+        {/* 금액 요약 */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>총  금  액</span>
           <span>{receipt.totalPrice?.toLocaleString()}원</span>
@@ -133,24 +142,31 @@ const ReceiptPage = () => {
 
         <hr />
 
+        {/* 현금영수증 정보 */}
+        {receipt.cashReceipt && (
+          <p style={{ fontSize: "12px", marginBottom: "4px" }}>
+            현금영수증 : {receipt.cashReceipt.type} ({receipt.cashReceipt.identity})
+          </p>
+        )}
+
         {/* QR 안내 문구 및 이미지 */}
+        <hr />
         <p style={{ textAlign: "center", fontSize: "12px", marginBottom: "4px" }}>
-          고객님의 소중한 의견을 들려주세요!
-          <br />
-          QR을 스캔하여 점포 만족도 조사에 참여해주세요.
+          궁금한 점, 불편한 점, 칭찬하고 싶으신 점이 있다면<br />
+          QR을 통해 의견 남겨주세요!
         </p>
         <img
           src="/qr.png"
           alt="만족도 조사 QR"
-          style={{ width: "120px", display: "block", margin: "0 auto 12px" }}
+          style={{ width: "160px", display: "block", margin: "0 auto 12px" }}
         />
 
         {/* 바코드 표시 */}
         <div style={{ textAlign: "center", marginTop: "12px" }}>
-          <Barcode value={receipt.transactionId.toString()} width={1.4} height={40} displayValue={false} />
+          <Barcode value={receipt.transactionId.toString()} width={1.8} height={40} displayValue={false} />
         </div>
 
-        <div style={{ textAlign: "center", fontSize: "11px", color: "#555", marginTop: "10px" }}>
+        <div style={{ textAlign: "center", fontSize: "11px", color: "#555", marginTop: "10px", marginBottom: "10px" }}>
           감사합니다. 또 방문해주세요!
         </div>
       </div>
