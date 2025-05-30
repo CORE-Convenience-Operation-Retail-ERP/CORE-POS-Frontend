@@ -1,15 +1,12 @@
 @media print {
   body {
-    background: white;
+    background: white !important;
     margin: 0;
     padding: 0;
-    zoom: 90%; /* (선택) 프린트 시 한 페이지에 맞게 살짝 축소 */
+    zoom: 90%; 
   }
 
-  .print-hidden {
-    display: none !important;
-  }
-
+  .print-hidden,
   header,
   footer,
   nav {
@@ -17,21 +14,62 @@
   }
 
   #receipt-box {
-    box-shadow: none;
-    border: none;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    /* width: 100% !important; */ /* 이 부분을 주석 처리하거나 제거 */
-    max-width: 280px; /* 인쇄 시 최대 폭 설정 (예: 80mm) */
+    box-shadow: none !important;
+    border: 1px solid #444 !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+    max-width: 280px !important; 
+    width: 100% !important;
     height: auto !important;
-    min-height: auto !important;
+    background-color: white !important;
     page-break-inside: avoid !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
   }
 
-  /* (선택) 바코드 간격 줄이기 */
+  /* 바코드, QR 코드 등 이미지 간격 줄이기 */
   #receipt-box canvas,
   #receipt-box img {
-    margin-bottom: 4px !important;
-    max-width: 100%;
+    margin-bottom: 8px !important;
+    max-width: 100% !important;
+    height: auto !important;
   }
+
+  /* 글자 여백 개선 */
+  #receipt-box p,
+  #receipt-box div,
+  #receipt-box span {
+    margin: 4px 0 !important;
+  }
+
+  /* 볼드 유지 */
+  #receipt-box p[style*="font-weight: bold"],
+  #receipt-box div[style*="font-weight: bold"],
+  #receipt-box span[style*="font-weight: bold"],
+  #receipt-box strong,
+  #receipt-box b,
+  #receipt-box h2 {
+    font-weight: 700 !important;
+    color: #000 !important;
+  }
+}
+
+/* 인쇄 버튼 스타일 */
+.print-button {
+  margin-top: 24px;
+  padding: 12px 24px;
+  border: none;
+  background-color: #5b7de8;
+  color: white;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.print-button:hover {
+  background-color: #4a6cd4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
