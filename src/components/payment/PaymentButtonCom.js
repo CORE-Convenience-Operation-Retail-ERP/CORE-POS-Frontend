@@ -49,6 +49,7 @@ const PaymentButtonCom = ({ cart, ageGroup, gender, onPaymentComplete }) => {
         merchant_uid: `order_${Date.now()}`,
         name: `${storeName} 매장 결제`,
         amount: totalFinalAmount,
+        popup: true,
       },
       async (rsp) => {
         if (rsp.success) {
