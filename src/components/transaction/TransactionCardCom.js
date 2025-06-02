@@ -58,7 +58,16 @@ const TransactionCardCom = ({ transaction, onRefund }) => {
       <div style={{ marginBottom: "7px" }}>🛒 상품: {productNames}</div>
       <div style={{ marginBottom: "7px" }}>💳 결제 수단: {paymentMethod?.toUpperCase()}</div>
       <div style={{ marginBottom: "7px", fontWeight: "bold", color: "#1d4ed8" }}>✅ 결제금액: {finalAmount?.toLocaleString()}원</div>
-      <div style={{ marginBottom: "10px" }}>📅 결제일시: {paidAt ? new Date(paidAt).toLocaleString() : "N/A"}</div>
+      <div style={{ marginBottom: "10px" }}>📅 결제일시: {paidAt ? new Date(paidAt).toLocaleString("ko-KR", {
+        timeZone: "Asia/Seoul",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }) : "N/A"}</div>
 
       <p style={statusTextStyle(isRefunded)}>
         상태: {isRefunded ? "❌ 환불됨" : "✅ 정상 결제"}
@@ -94,7 +103,16 @@ const TransactionCardCom = ({ transaction, onRefund }) => {
         <div style={{ marginBottom: "10px", fontSize: "13px", color: "#444" }}>
           <p>📝 환불사유: {refundReason || "없음"}</p>
           <p>↩️ 환불금액: {refundAmount?.toLocaleString()}원</p>
-          <p>📆 환불일시: {refundedAt ? new Date(refundedAt).toLocaleString() : "미기록"}</p>
+          <p>📆 환불일시: {refundedAt ? new Date(refundedAt).toLocaleString("ko-KR", {
+            timeZone: "Asia/Seoul",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+          }) : "미기록"}</p>
         </div>
       )}
 

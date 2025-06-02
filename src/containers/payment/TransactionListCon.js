@@ -18,6 +18,7 @@ const TransactionListCon = () => {
       setLoading(true);
       const storeId = localStorage.getItem("storeId");
       const data = await fetchTransactions(storeId);
+
       setTransactions(data || []);
     } catch (error) {
       alert("거래내역을 불러오지 못했습니다.");
@@ -44,6 +45,7 @@ const TransactionListCon = () => {
     const grouped = {};
     for (const tx of data) {
       const date = new Date(tx.paidAt).toLocaleDateString("ko-KR", {
+        timeZone: "Asia/Seoul",
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
