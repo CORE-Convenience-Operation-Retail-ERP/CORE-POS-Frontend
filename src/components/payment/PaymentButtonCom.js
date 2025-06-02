@@ -37,7 +37,7 @@ const PaymentButtonCom = ({ cart, ageGroup, gender, onPaymentComplete }) => {
     }
 
     const IMP = window.IMP;
-    IMP.init("imp32623681");
+    IMP.init(process.env.REACT_APP_IMP_KEY);
 
     const storeName = localStorage.getItem("storeName") || "CORE POS";
     const storeId = localStorage.getItem("storeId");

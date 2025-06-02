@@ -33,12 +33,7 @@ const CashPaymentCom = ({ cart, amount, ageGroup, gender, onPaymentComplete }) =
       return;
     }
 
-    if (wantsReceipt) {
-      alert(
-        `현금영수증 신청 완료!\n\n[구분] ${receiptType}\n[식별번호] ${identifier}`
-      );
-    }
-
+   
     try {
       const storeId = parseInt(localStorage.getItem("storeId"));
 
@@ -77,6 +72,13 @@ const CashPaymentCom = ({ cart, amount, ageGroup, gender, onPaymentComplete }) =
       };
 
       await savePayment(paymentData);
+      
+      if (wantsReceipt) {
+        alert(
+          `현금영수증 발급이 완료되었습니다!\n\n[구분] ${receiptType}\n[식별번호] ${identifier}`
+        );
+      }
+
       // 모바일 환경에서의 라우팅 안정성을 위해 setTimeout 사용
       setTimeout(() => {
         navigate("/pos/order", { replace: true });

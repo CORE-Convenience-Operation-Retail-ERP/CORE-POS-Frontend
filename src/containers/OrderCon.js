@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PaymentSummaryCom from "../components/payment/PaymentSummaryCom";
 import DisposalModal from "../components/DisposalModal";
-import { fetchRelatedProducts } from "../services/fetchRelatedProducts";
-import { fetchFoodProduct } from "../services/fetchFoodProduct";
 import axiosInstance from "../services/axiosInstance";
 import { saveTempCart } from "../services/tempStorageService";
 import BarcodeScannerCom from "../components/order/BarcodeScannerCom";
@@ -14,7 +12,7 @@ function OrderCon({ onGoToPayment }) {
   const [cart, setCart] = useState({});
   const [scannedProduct, setScannedProduct] = useState(null);
   const [isDisposalModalOpen, setIsDisposalModalOpen] = useState(false);
-  const [showScanner, setShowScanner] = useState(true); // 🔄 스캐너 mount 관리
+  const [showScanner, setShowScanner] = useState(true); 
   const location = useLocation();
 
   useEffect(() => {
@@ -31,32 +29,6 @@ function OrderCon({ onGoToPayment }) {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    return () => setShowScanner(false); // 언마운트 시 스캐너 강제 해제
-  }, []);
-
-  const handleExternalFallback = async (barcode) => {
-    const external = await fetchFoodProduct(barcode);
-    if (!external?.barcode) {
-      alert("공공 API에서 상품을 찾을 수 없습니다.");
-      return;
-    }
-
-    const externalBarcode = external.barcode;
-    await fetchRelatedProducts(externalBarcode);
-
-    setCart((prev) => ({
-      ...prev,
-      [externalBarcode]: {
-        productId: null,
-        stockId: null,
-        name: external.name || external.productName || "이름 없음",
-        price: Number(external.price) || 0,
-        isPromo: 0,
-        quantity: (prev[externalBarcode]?.quantity || 0) + 1,
-      },
-    }));
-  };
 
   const handleBarcode = async (barcode) => {
     try {
@@ -80,21 +52,25 @@ function OrderCon({ onGoToPayment }) {
       }
 
       const productName = product.productName || product.PRDLST_NM || "이름 없음";
+      const unitPrice = product.unitPrice || product.price || 0;
+      const productId = product.productId || null;
+      const stockId = product.stockId || null;
+      const isPromo = product.isPromo || 0;
 
       setCart((prev) => ({
         ...prev,
         [barcode]: {
-          productId: product.productId,
-          stockId: product.stockId,
+          productId: productId,
+          stockId: stockId,
           name: productName,
-          price: product.unitPrice,
-          isPromo: product.isPromo || 0,
+          price: unitPrice,
+          isPromo: isPromo,
           quantity: (prev[barcode]?.quantity || 0) + 1,
         },
       }));
     } catch (error) {
       console.error("상품 정보 가져오기 실패:", error);
-      await handleExternalFallback(barcode);
+      alert("상품 정보를 가져오는데 실패했습니다.");
     }
   };
 

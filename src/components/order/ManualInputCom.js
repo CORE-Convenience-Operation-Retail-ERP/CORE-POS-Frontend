@@ -1,5 +1,4 @@
 import { useState } from "react";
-import BarcodeScannerCom from "./BarcodeScannerCom"; // 상대 경로는 프로젝트에 맞게 조정
 
 const ManualInputCom = ({ onBarcodeSubmit }) => {
   const [input, setInput] = useState('');
@@ -80,12 +79,6 @@ const ManualInputCom = ({ onBarcodeSubmit }) => {
           추가
         </button>
       </div>
-
-      {/* 스캐너는 항상 보여줌 */}
-      <BarcodeScannerCom
-        onScanSuccess={onBarcodeSubmit}
-        onRetry={() => {}}
-      />
     </div>
   );
 };
